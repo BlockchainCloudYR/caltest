@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Depreciation Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+        }
+        label {
+            margin: 10px 0;
+            display: block;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .block {
+            margin-bottom: 10px;
+        }
+        .asset-blocks {
+            display: none;
+            margin-left: 20px;
+        }
+        .highlight {
+            font-weight: bold;
+            color: red;
+        }
+
+        input[type="checkbox"] {
+        margin-top: -50px; /* Move checkboxes slightly upward */
+        vertical-align: middle; /* Align them with the label text */
+        }
+
+        @media (max-width: 768px) {
+            input[type="checkbox"] {
+                margin-top: -50px; /* Adjust the margin slightly for smaller screens */
+            }
+
+            label {
+                font-size: 14px; /* Slightly reduce font size */
+            }
+        }
+
+        @media (max-width: 480px) {
+            input[type="checkbox"] {
+                margin-top: -2px; /* Further adjust for very small screens */
+            }
+
+            label {
+                font-size: 12px; /* Further reduce font size */
+            }
+        }
+
+        .asset-blocks .block input[type="radio"] {
+            vertical-align: middle; /* Aligns the radio button vertically with the middle of the line height */
+            margin-top: -25px; /* Fine-tune this value to achieve the desired position */
+        }
+
+        ul.no-bullets {
+            list-style-type: none;  /* This removes the default bullets */
+            
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Depreciation Calculator for FY 2024-25</h2>
+        
+        <form id="depreciationForm">
+            <!-- Asset Blocks with Depreciation Rates -->
+            <div id="assetBlocks">
+                <h3>Assets</h3>
+
+                <div class="block">
+                    <label for="buildingBlock" class="asset-label">Buildings</label>
+                    <input type="checkbox" id="buildingBlock" onclick="toggleAssetBlocks('building')">
+                </div>
+
+                <!-- Furniture and Fittings Block -->
+                <div class="block">
+                    <label for="furnitureFittingsBlock" class="asset-label">Furniture and Fittings</label>
+                    <input type="checkbox" id="furnitureFittingsBlock" onclick="toggleAssetBlocks('furniture')">
+                </div>
+
+                <div class="block">
+                    <label for="plantMachineryBlock" class="asset-label">Plant & Machinery</label>
+                    <input type="checkbox" id="plantMachineryBlock" onclick="toggleAssetBlocks('plantMachinery')">
+                </div>
+
+                <div class="block">
+                    <label for="shipBlock" class="asset-label">Ships</label>
+                    <input type="checkbox" id="shipBlock" onclick="toggleAssetBlocks('ship')">
+                </div>
+
+            </div>
+
+            <div id="buildingBlocks" class="asset-blocks">
+            
+                <h4>Buildings</h4>
+                <div class="block">
+                    <label for="buildingBlock1">Block 1: Buildings used mainly for residential purposes (except hotels & boarding houses)</label>
+                    <span class="highlight"> 5%</span>
+                    <input type="radio" name="assetBlock" id="buildingBlock1" value="buildingBlock1">
+                </div>
+                <div class="block">
+                    <label for="buildingBlock2">Block 2: Buildings not used mainly for residential purposes and not covered by Block(1) above and (3) below</label>
+                    <span class="highlight"> 10%</span>
+                    <input type="radio" name="assetBlock" id="buildingBlock2" value="buildingBlock2">
+                </div>
+                <div class="block">
+                    <label for="buildingBlock3">Block 3: Buildings acquired on or after 1st September, 2002 for installing machinery and plant forming part of water supply project or water treatment system</label>
+                    <span class="highlight"> 40%</span>
+                    <input type="radio" name="assetBlock" id="buildingBlock3" value="buildingBlock3">
+                </div>
+                <div class="block">
+                    <label for="buildingBlock4">Block 4: Purely temporary erections such as wooden structures</label>
+                    <span class="highlight"> 40%</span>
+                    <input type="radio" name="assetBlock" id="buildingBlock4" value="buildingBlock4">
+                </div>
+                
+            </div>
+
+            <div id="furnitureBlocks" class="asset-blocks">
+                <h4>Furniture and Fittings</h4>
+                <div class="block">
+                    <label for="furnitureFittingsBlock1">Block 1: Furniture and fittings including electrical fittings</label>
+                    <span class="highlight"> 10%</span>
+                    <input type="radio" name="assetBlock" id="furnitureFittingsBlock1" value="furnitureFittingsBlock1">
+                </div>
+            </div>
+
+
+            <div id="plantMachineryBlocks" class="asset-blocks">
+                <h4>Plant & Machinery</h4>
+                <div class="block">
+                    <label for="plantMachineryBlock1">Block 1: Motor cars other than those used in a business of running them on hire, acquired during the period form 23.8.2019 to 31.03.2020 and put to use on or before 31.03.2020</label>
+                    <span class="highlight"> 30%</span>
+                    <input type="radio" name="assetBlock" id="plantMachineryBlock1" value="plantMachineryBlock1">
+                </div>
+                <div class="block">
+                    <label for="plantMachineryBlock2">Block 2: Motor cars other than those used in a business of running them on hire, acquired or put to use on or after 1-4-1990 [Other than motor cars mentioned in Block 1 above]</label>
+                    <span class="highlight"> 15%</span>
+                    <input type="radio" name="assetBlock" id="plantMachineryBlock2" value="plantMachineryBlock2">
+                </div>
+                <div class="block">
+                    <label for="plantMachineryBlock3">Block 3: Motors buses, motor lorries, motor taxis used in a business of running them on hire ,acquired during the period from 23.8.2019 to 31.03.2020 and put to use on or before 31.03.2020</label>
+                    <span class="highlight"> 45%</span>
+                    <input type="radio" name="assetBlock" id="plantMachineryBlock3" value="plantMachineryBlock3">
+                </div>
+                <div class="block">
+                    <label for="plantMachineryBlock4">Block 4: Motors buses, motor lorries, motor taxis used in the business of running them on hire [Other than mentioned in Block 3 above]</label>
+                    <span class="highlight"> 30%</span>
+                    <input type="radio" name="assetBlock" id="plantMachineryBlock4" value="plantMachineryBlock4">
+                </div>
+                <div class="block">
+                    <label for="plantMachineryBlock5">Block 5: Moulds used in rubber and plastic goods factories</label>
+                    <span class="highlight"> 30%</span>
+                    <input type="radio" name="assetBlock" id="plantMachineryBlock5" value="plantMachineryBlock5">
+                </div>
+                <div class="block">
+                    <label for="plantMachineryBlock6">Block 6: Aeroplanes, Aeroengines</label>
+                    <span class="highlight"> 40%</span>
+                    <input type="radio" name="assetBlock" id="plantMachineryBlock6" value="plantMachineryBlock6">
+                </div>
+                <div class="block">
+                    <label for="plantMachineryBlock7">Block 7: Specifies air pollution control equipments, water pollution control equipments, solid waste control equipment and solid waste recycling and resource recovery systems</label>
+                    <span class="highlight"> 40%</span>
+                    <input type="radio" name="assetBlock" id="plantMachineryBlock7" value="plantMachineryBlock7">
+                </div>
+                <div class="block">
+                    <label for="plantMachineryBlock8">Block 8: Plant & Machinery used in semi-conductor industry covering all Integrated Circuits (ICs) (other than mentioned in Block 7 Above)</label>
+                    <span class="highlight"> 30%</span>
+                    <input type="radio" name="assetBlock" id="plantMachineryBlock8" value="plantMachineryBlock8">
+                </div>
+                <div class="block">
+                    <label for="plantMachineryBlock9">Block 9: Life-saving medical equipment</label>
+                    <span class="highlight"> 40%</span>
+                    <input type="radio" name="assetBlock" id="plantMachineryBlock9" value="plantMachineryBlock9">
+                </div>
+                <div class="block">
+                    <label for="plantMachineryBlock10">Block 10: Machinery and plant, acquired and installed on or after the 1st September, 2002 in a water supply project or a water treatment system and which is put to use for the purpose of business of providing infrastructure facility</label>
+                    <span class="highlight"> 40%</span>
+                    <input type="radio" name="assetBlock" id="plantMachineryBlock10" value="plantMachineryBlock10">
+                </div>
+                <div class="block">
+                    <label for="plantMachineryBlock11">Block 11: Containers made of glass or plastic used as re-fills</label>
+                    <span class="highlight"> 40%</span>
+                    <input type="radio" name="assetBlock" id="plantMachineryBlock11" value="plantMachineryBlock11">
+                </div>
+                <div class="block">
+                    <label for="plantMachineryBlock12">Block 12: Energy Saving Devices (as specified)</label>
+                    <span class="highlight"> 40%</span>
+                    <input type="radio" name="assetBlock" id="plantMachineryBlock12" value="plantMachineryBlock12">
+                </div>
+                <div class="block">
+                    <label for="plantMachineryBlock13">Block 13: Renewable Energy Saving Devices (as specified) including the devices specifies in (i) to (iii) below
+                    <ul class="no-bullets">
+                        <li><strong>(i)</strong> Electrically operated vehicles including battery powered or fuel-cell powered vehicles</li>
+                        <li><strong>(ii)</strong> Windmills and any specially designed devices which run on windmills installed on or after 1.4.2014</li>
+                        <li><strong>(iii)</strong> Any special device including electric generators and pumps running on wind energy installed on or after 1.4.2014</li>
+                    </ul>
+                    </label>
+                    <span class="highlight"> 40%</span>
+                    <input type="radio" name="assetBlock" id="plantMachineryBlock13" value="plantMachineryBlock13">
+                </div>
+                <div class="block">
+                    <label for="plantMachineryBlock14">Block 14: Windmills and any specially designed devices running on windmills installed on or before 31.3.2014 and any special devices including electric generators and pumps running on wind energy installed on or before 31.3.2014</label>
+                    <span class="highlight"> 15%</span>
+                    <input type="radio" name="assetBlock" id="plantMachineryBlock14" value="plantMachineryBlock14">
+                </div>
+                <div class="block">
+                    <label for="plantMachineryBlock15">Block 15: Computers including computer software</label>
+                    <span class="highlight"> 40%</span>
+                    <input type="radio" name="assetBlock" id="plantMachineryBlock15" value="plantMachineryBlock15">
+                </div>
+                <div class="block">
+                    <label for="plantMachineryBlock16">Block 16: Books (annual publications or other than annual publications) owned by assesses carrying on a profession</label>
+                    <span class="highlight"> 40%</span>
+                    <input type="radio" name="assetBlock" id="plantMachineryBlock16" value="plantMachineryBlock16">
+                </div>
+                <div class="block">
+                    <label for="plantMachineryBlock17">Block 17: Books owned by assesses carrying on business in running lending libraries</label>
+                    <span class="highlight"> 40%</span>
+                    <input type="radio" name="assetBlock" id="plantMachineryBlock17" value="plantMachineryBlock17">
+                </div>
+                <div class="block">
+                    <label for="plantMachineryBlock18">Block 18: Plant & machinery (General rate)</label>
+                    <span class="highlight"> 15%</span>
+                    <input type="radio" name="assetBlock" id="plantMachineryBlock18" value="plantMachineryBlock18">
+                </div>
+            </div>
+
+            <div id="shipBlocks" class="asset-blocks">
+                <h4>Ships</h4>
+                <div class="block">
+                    <label for="shipBlock1">Block 1: Ocean-going ships</label>
+                    <span class="highlight"> 20%</span>
+                    <input type="radio" name="assetBlock" id="shipBlock1" value="shipBlock1">
+                </div>
+                <div class="block">
+                    <label for="shipBlock2">Block 2: Vessels ordinarily operating on inland waters not covered by Block (3) below</label>
+                    <span class="highlight"> 20%</span>
+                    <input type="radio" name="assetBlock" id="shipBlock2" value="shipBlock2">
+                </div>
+                <div class="block">
+                    <label for="shipBlock3">Block 3: Speed boats operating on inland water</label>
+                    <span class="highlight"> 20%</span>
+                    <input type="radio" name="assetBlock" id="shipBlock3" value="shipBlock3">
+                </div>
+            </div>
+            
+
+            <!-- Opening Balance -->
+            <label for="openingBalance">Opening Balance (₹):</label>
+            <input type="number" id="openingBalance" required>
+
+            <!-- Number of New Assets Purchased -->
+            <label for="newPurchases">Number of New Assets Purchased:</label>
+            <input type="number" id="newPurchases" min="1" required><br><br>
+            
+            <div id="newPurchasesSection"></div>
+
+            <!-- Depreciation Method -->
+            <label for="depreciationMethod">Select Depreciation Method:</label><br>
+            <div id="depreciationMethod">
+                <label for="methodSLM">SLM (Straight Line Method)</label>
+                <input type="checkbox" id="methodSLM" name="depreciationMethod" value="SLM">
+                <label for="methodWDV">WDV (Written Down Value)</label>
+                <input type="checkbox" id="methodWDV" name="depreciationMethod" value="WDV">
+            </div>
+
+            <button type="submit">Calculate Depreciation</button>
+        </form>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // Function to dynamically generate input fields for new purchases
+        document.getElementById("newPurchases").addEventListener("input", function() {
+            const numPurchases = parseInt(this.value);
+            const section = document.getElementById("newPurchasesSection");
+            section.innerHTML = ""; // Clear previous inputs
+
+            for (let i = 0; i < numPurchases; i++) {
+                const newPurchaseDiv = document.createElement("div");
+                newPurchaseDiv.classList.add("purchase-input");
+
+                newPurchaseDiv.innerHTML = `
+                    <h3>Asset ${i + 1}</h3>
+                    <label for="cost${i}">Cost (₹):</label>
+                    <input type="number" id="cost${i}" required>
+
+                    <label for="purchaseDate${i}">Purchase Date:</label>
+                    <input type="date" id="purchaseDate${i}" required>
+
+                    <label for="putToUseDate${i}">Put to Use Date:</label>
+                    <input type="date" id="putToUseDate${i}" required>
+                `;
+
+                section.appendChild(newPurchaseDiv);
+            }
+        });
+
+        // Handle form submission
+        document.getElementById("depreciationForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            // Validate Asset Selection
+            const buildingChecked = document.getElementById("buildingBlock").checked;
+            const furnitureChecked = document.getElementById("furnitureFittingsBlock").checked;
+            const plantMachineryChecked = document.getElementById("plantMachineryBlock").checked;
+            const shipChecked = document.getElementById("shipBlock").checked;
+
+            if (!buildingChecked && !furnitureChecked && !plantMachineryChecked && !shipChecked) {
+                alert("Please select at least one asset type (Buildings or Furniture and Fittings or Plant and Machinery or Ships).");
+                return;
+            }
+
+            // Validate Specific Block Selection
+            const selectedBlock = document.querySelector('input[name="assetBlock"]:checked');
+            if (!selectedBlock) {
+                alert("Please select at least one block for the chosen asset.");
+                return;
+            }
+
+            // Validate Depreciation Method Selection
+            const selectedMethod = document.querySelectorAll('input[name="depreciationMethod"]:checked');
+            if (selectedMethod.length !== 1) {
+                alert("Please select exactly one depreciation method (SLM or WDV).");
+                return;
+            }
+
+            const method = selectedMethod[0].value;
+
+            const openingBalance = parseFloat(document.getElementById("openingBalance").value);
+            const depreciationRate = getSelectedDepreciationRate();
+            const numPurchases = parseInt(document.getElementById("newPurchases").value);
+            const newPurchases = [];
+
+            for (let i = 0; i < numPurchases; i++) {
+                const cost = parseFloat(document.getElementById(`cost${i}`).value);
+                const purchaseDate = document.getElementById(`purchaseDate${i}`).value;
+                const putToUseDate = document.getElementById(`putToUseDate${i}`).value;
+
+                // Convert date strings to Date objects for comparison
+                const purchaseDateObj = new Date(purchaseDate);
+                const putToUseDateObj = new Date(putToUseDate);
+
+                // Check if Put to Use date is before Purchase date
+                if (putToUseDateObj < purchaseDateObj) {
+                    alert(`Put to Use date for purchase ${i + 1} cannot be before the Purchase date.`);
+                    return;
+                }
+
+                newPurchases.push({ cost, purchaseDate, putToUseDate });
+            }
+
+            let totalDepreciation = 0;
+
+            if (method === "SLM") {
+                totalDepreciation = calculateDepreciation(openingBalance, newPurchases, depreciationRate);
+            } else {
+                alert("WDV calculations are not implemented yet."); // Placeholder for WDV implementation
+            }
+            document.getElementById("result").innerHTML = `Total Depreciation: ₹${totalDepreciation}`;
+            
+        });
+
+        function toggleAssetBlocks(assetType) {
+            const buildingBlock = document.getElementById("buildingBlocks");
+            const furnitureBlock = document.getElementById("furnitureBlocks");
+            const plantMachineryBlock = document.getElementById("plantMachineryBlocks");
+            const shipBlock = document.getElementById("shipBlocks");
+
+            if (assetType === 'building') {
+                // Uncheck Furniture checkbox and hide its content
+                document.getElementById("furnitureFittingsBlock").checked = false;
+                document.getElementById("plantMachineryBlock").checked = false;
+                document.getElementById("shipBlock").checked = false;
+                furnitureBlock.style.display = 'none';
+                plantMachineryBlock.style.display = 'none';
+                shipBlock.style.display = "none";
+
+                // Show Building content if checked, otherwise hide it
+                if (document.getElementById("buildingBlock").checked) {
+                    buildingBlock.style.display = 'block';
+                } else {
+                    buildingBlock.style.display = 'none';
+                }
+            } else if (assetType === 'furniture') {
+                // Uncheck Building checkbox and hide its content
+                document.getElementById("buildingBlock").checked = false;
+                document.getElementById("plantMachineryBlock").checked = false;
+                document.getElementById("shipBlock").checked = false;
+                buildingBlock.style.display = 'none';
+                plantMachineryBlock.style.display = 'none';
+                shipBlock.style.display = "none";
+
+                // Show Furniture content if checked, otherwise hide it
+                if (document.getElementById("furnitureFittingsBlock").checked) {
+                    furnitureBlock.style.display = 'block';
+                } else {
+                    furnitureBlock.style.display = 'none';
+                }
+            } else if (assetType === 'plantMachinery') {
+                // Uncheck Building checkbox and hide its content
+                document.getElementById("buildingBlock").checked = false;
+                document.getElementById("furnitureFittingsBlock").checked = false;
+                document.getElementById("shipBlock").checked = false;
+                buildingBlock.style.display = 'none';
+                furnitureBlock.style.display = 'none';
+                shipBlock.style.display = "none";
+
+                // Show Furniture content if checked, otherwise hide it
+                if (document.getElementById("plantMachineryBlock").checked) {
+                    plantMachineryBlock.style.display = 'block';
+                } else {
+                    plantMachineryBlock.style.display = 'none';
+                }
+            } else if (assetType === 'ship') {
+                // Uncheck Building checkbox and hide its content
+                document.getElementById("buildingBlock").checked = false;
+                document.getElementById("furnitureFittingsBlock").checked = false;
+                document.getElementById("plantMachineryBlock").checked = false;
+                buildingBlock.style.display = 'none';
+                furnitureBlock.style.display = 'none';
+                plantMachineryBlock.style.display = 'none';
+
+                // Show Furniture content if checked, otherwise hide it
+                if (document.getElementById("shipBlock").checked) {
+                    shipBlock.style.display = 'block';
+                } else {
+                    shipBlock.style.display = 'none';
+                }
+            }
+        }
+
+
+        // Function to toggle depreciation method options
+        function toggleDepreciationMethod(methodType) {
+            const slmBlock = document.getElementById("methodSLM");
+            const wdvBlock = document.getElementById("methodWDV");
+
+            if (methodType === 'SLM') {
+                // Uncheck WDV and hide its content
+                document.getElementById("methodWDV").checked = false;
+                if (!slmBlock.checked) {
+                    // Show SLM method
+                    alert("SLM method selected!");
+                }
+            } else if (methodType === 'WDV') {
+                // Uncheck SLM and hide its content
+                document.getElementById("methodSLM").checked = false;
+                if (!wdvBlock.checked) {
+                    // Show WDV method
+                    alert("WDV method selected!");
+                }
+            }
+        }
+
+        // Attach event listeners for Depreciation Method
+        document.getElementById("methodSLM").addEventListener("change", function() {
+            toggleDepreciationMethod('SLM');
+        });
+
+        document.getElementById("methodWDV").addEventListener("change", function() {
+            toggleDepreciationMethod('WDV');
+        });
+
+
+
+
+        // Function to get selected depreciation rate based on selected asset block
+        function getSelectedDepreciationRate() {
+            const selectedBlock = document.querySelector('input[name="assetBlock"]:checked');
+            if (selectedBlock) {
+                switch (selectedBlock.value) {
+                    case "buildingBlock1":
+                        return 5;
+                    case "buildingBlock2":
+                        return 10;
+                    case "buildingBlock3":
+                        return 40;
+                    case "buildingBlock4":
+                        return 40;
+                    case "furnitureFittingsBlock1":
+                        return 10;
+                    case "plantMachineryBlock1":
+                        return 30;
+                    case "plantMachineryBlock2":
+                        return 15;
+                    case "plantMachineryBlock3":
+                        return 45;
+                    case "plantMachineryBlock4":
+                        return 30;
+                    case "plantMachineryBlock5":
+                        return 30;
+                    case "plantMachineryBlock6":
+                        return 40;
+                    case "plantMachineryBlock7":
+                        return 40;
+                    case "plantMachineryBlock8":
+                        return 30;
+                    case "plantMachineryBlock9":
+                        return 40;
+                    case "plantMachineryBlock10":
+                        return 40;
+                    case "plantMachineryBlock11":
+                        return 40;
+                    case "plantMachineryBlock12":
+                        return 40;
+                    case "plantMachineryBlock13":
+                        return 40;
+                    case "plantMachineryBlock14":
+                        return 15;
+                    case "plantMachineryBlock15":
+                        return 40;
+                    case "plantMachineryBlock16":
+                        return 40;
+                    case "plantMachineryBlock17":
+                        return 40;
+                    case "plantMachineryBlock18":
+                        return 15;
+                    case "shipBlock1":
+                        return 20;
+                    case "shipBlock2":
+                        return 20;
+                    case "shipBlock3":
+                        return 20;
+
+                    default:
+                        return 0; // Default case if no block selected
+                }
+            }
+            return 0; // Default case if no block selected
+        }
+
+        // Depreciation calculation function (same as before)
+        function calculateDepreciation(openingBalance, newPurchases, depreciationRate) {
+            let totalDepreciation = 0;
+
+            // Function to calculate depreciation for a given asset
+            function calculateAssetDepreciation(cost, purchaseDate, putToUseDate, depreciationRate) {
+                const purchaseYear = new Date(purchaseDate).getFullYear();
+                const october5th = new Date(purchaseYear, 9, 5);  // October 5th of the purchase year
+                const putToUseDateObj = new Date(putToUseDate);
+
+                let effectiveRate = depreciationRate;
+
+                // If purchase is after October 5th, apply half depreciation rate
+                if (putToUseDateObj > october5th) {
+                    effectiveRate = depreciationRate / 2;
+                }
+
+                // Calculate depreciation for the fiscal year if the purchase date is within the fiscal year
+                let depreciation = cost * (effectiveRate / 100);
+                return depreciation;
+            }
+
+            // 1. Calculate depreciation for opening balance (full year depreciation)
+            totalDepreciation += openingBalance * (depreciationRate / 100);
+
+            // 2. Calculate depreciation for each new purchase
+            for (let i = 0; i < newPurchases.length; i++) {
+                const { cost, purchaseDate, putToUseDate } = newPurchases[i];
+                totalDepreciation += calculateAssetDepreciation(cost, purchaseDate, putToUseDate, depreciationRate);
+            }
+
+            return totalDepreciation;
+        }
+    </script>
+
+</body>
+</html>
